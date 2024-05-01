@@ -2,13 +2,13 @@ package com.rapidattendencesystem.project.controller;
 
 import java.util.List;
 
+import com.rapidattendencesystem.project.dto.HallDTO;
+import com.rapidattendencesystem.project.entity.Course;
+import com.rapidattendencesystem.project.entity.Hall;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.rapidattendencesystem.project.dto.CourseDTO;
 import com.rapidattendencesystem.project.dto.ResponseDTO;
@@ -24,7 +24,75 @@ public class CourseController {
 
 	@Autowired
 	private ResponseDTO responseDTO;
-	
+
+	@PostMapping("/addcourse")
+	public ResponseEntity<ResponseDTO> createCourse(@RequestBody CourseDTO courseDTO){
+		try {
+			Course C1 = courseService.createCourse(courseDTO);
+			if(C1.getId()>0){
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Course Inserted");
+				responseDTO.setContent(C1);
+				return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+			}else{
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Bad Request");
+				responseDTO.setContent(courseDTO);
+				return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.BAD_REQUEST);
+			}
+		}catch (Exception e){
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping("/deletecourse")
+	public ResponseEntity<ResponseDTO> deleteHall(@RequestBody CourseDTO courseDTO){
+		try{
+			Course c1 = courseService.deleteCourse(courseDTO);
+			if(c1.getId() > 0){
+				responseDTO.setContent(c1);
+				responseDTO.setMassage("Deleted");
+				responseDTO.setCode("00");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}else{
+				responseDTO.setContent(courseDTO);
+				responseDTO.setMassage("Error Occured");
+				responseDTO.setCode("01");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+			}
+		}catch (Exception e){
+			responseDTO.setContent(null);
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setCode("02");
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping("/updatecourse")
+	public ResponseEntity<ResponseDTO> updateCourse(@RequestBody CourseDTO courseDTO){
+		try{
+			Course c1 = courseService.updateCourse(courseDTO);
+			if(c1.getId() > 0){
+				responseDTO.setContent(c1);
+				responseDTO.setMassage("Updated");
+				responseDTO.setCode("00");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}else{
+				responseDTO.setContent(courseDTO);
+				responseDTO.setMassage("Error Occured");
+				responseDTO.setCode("01");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+			}
+		}catch (Exception e){
+			responseDTO.setContent(null);
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setCode("02");
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@GetMapping("/getcourses")
 	public ResponseEntity<ResponseDTO> getCourses(){

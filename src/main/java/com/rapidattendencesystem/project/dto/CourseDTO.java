@@ -28,4 +28,5 @@ public class CourseDTO {
 	private String endTime;
 	private Boolean isActive;
 	private BigDecimal classFeeAmount;
+	private String code;
 }
