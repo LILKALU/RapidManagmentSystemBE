@@ -24,7 +24,7 @@ public class EnrolmentCourse {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	private String code;
+	private Boolean isActive;
 	
 	@JsonIgnore
 	@ManyToOne

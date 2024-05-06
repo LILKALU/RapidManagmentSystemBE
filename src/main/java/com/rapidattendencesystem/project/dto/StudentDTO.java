@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 public class StudentDTO {	
 	private int id;
-	private String Scode;
+	private String scode;
 	private String fullName;
 	private String callingName;
 	private String birthDay;

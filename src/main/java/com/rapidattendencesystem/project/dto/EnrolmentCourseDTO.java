@@ -18,7 +18,7 @@ import lombok.ToString;
 public class EnrolmentCourseDTO {
 
 	private int id;
-	private String code;
+	private Boolean isActive;
 	private Enrolment enrolment;
 	private Course course;
 }

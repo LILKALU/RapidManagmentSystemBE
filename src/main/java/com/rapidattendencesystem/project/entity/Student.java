@@ -30,7 +30,7 @@ public class Student {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String Scode;
+	private String scode;
 	private String fullName;
 	private String callingName;
 	private String birthDay;
@@ -39,8 +39,6 @@ public class Student {
 	private String contactNumber;
 	private String School;
 	private Boolean isAdmisionPaid;
-
-
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Address address;
@@ -59,7 +57,7 @@ public class Student {
 	
 	@PostPersist
     public void generateScode() {
-        this.Scode = "S" + Integer.toString((Year.now().getValue())) + String.format("%05d", this.id);
+        this.scode = "S" + Integer.toString((Year.now().getValue())) + String.format("%05d", this.id);
     }
 	 
 } 

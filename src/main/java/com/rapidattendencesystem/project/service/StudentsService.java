@@ -1,7 +1,9 @@
 package com.rapidattendencesystem.project.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.rapidattendencesystem.project.dto.ParentDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,5 +100,21 @@ public class StudentsService {
 
 	public List<StudentDTO> getStudents() {
 		return modelmapper.map(studentrepo.findByIsActive(true), new TypeToken<List<StudentDTO>>() {}.getType()) ;
+	}
+
+	public StudentDTO getStudentByScode(String scode){
+		try{
+			Optional<Student> std = studentrepo.findStudentByScode(scode);
+			if(std.isPresent()) {
+				StudentDTO S1 = modelmapper.map(std.get(), StudentDTO.class);
+				return S1;
+			}else{
+				return null;
+			}
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			return null;
+		}
 	}
 }

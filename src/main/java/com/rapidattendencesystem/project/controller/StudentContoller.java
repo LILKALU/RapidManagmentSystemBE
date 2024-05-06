@@ -1,6 +1,7 @@
 package com.rapidattendencesystem.project.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -129,5 +130,28 @@ public class StudentContoller {
 		}
 	}
 	
-	
+	@GetMapping("/getstudentbyscode/{scode}")
+	public ResponseEntity<ResponseDTO> getStudentByScode(@PathVariable String scode){
+		try {
+			StudentDTO S1 = studentService.getStudentByScode(scode);
+			if(S1.getFullName() == null) {
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Sudent is empty");
+				responseDTO.setContent(null);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+			}else {
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Success");
+				responseDTO.setContent(S1);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
