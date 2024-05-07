@@ -15,6 +15,7 @@ import java.util.List;
 public class GradeDTO {
     private int id;
     private String name;
+    private String code;
     private List<Course> course;
 
     private Boolean isActive;

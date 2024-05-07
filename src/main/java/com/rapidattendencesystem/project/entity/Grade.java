@@ -4,12 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,10 +21,16 @@ public class Grade {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
+	private String code;
 	
 	@OneToMany(mappedBy = "grade")
 	@JsonIgnore
 	private List<Course> course;
 	
 	private Boolean isActive;
+
+	@PostPersist
+	public void generateGradecode() {
+		this.code = "Gr" + String.format("%01d", this.id);
+	}
 }
