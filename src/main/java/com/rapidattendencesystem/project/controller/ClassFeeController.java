@@ -2,14 +2,11 @@ package com.rapidattendencesystem.project.controller;
 
 import java.util.List;
 
+import com.rapidattendencesystem.project.dto.GradeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.rapidattendencesystem.project.dto.ClassFeeDTO;
 import com.rapidattendencesystem.project.dto.ResponseDTO;
@@ -49,6 +46,29 @@ public class ClassFeeController {
 			responseDTO.setContent(null);
 			responseDTO.setMassage(e.getMessage());
 			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/getclassfee")
+	public ResponseEntity<ResponseDTO> getClassFee(){
+		try{
+			List<ClassFeeDTO> classfees = classFeeService.getClassFee();
+			if(!classfees.isEmpty()){
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Succuss");
+				responseDTO.setContent(classfees);
+				return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+			}else{
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Grades Empty");
+				responseDTO.setContent(null);
+				return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.BAD_REQUEST);
+			}
+		}catch (Exception e){
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
