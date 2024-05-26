@@ -1,10 +1,7 @@
 package com.rapidattendencesystem.project.service;
 
 import com.rapidattendencesystem.project.dto.*;
-import com.rapidattendencesystem.project.entity.Attendance;
-import com.rapidattendencesystem.project.entity.Course;
-import com.rapidattendencesystem.project.entity.Hall;
-import com.rapidattendencesystem.project.entity.Month;
+import com.rapidattendencesystem.project.entity.*;
 import com.rapidattendencesystem.project.repo.AttendanceRepo;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -47,6 +44,22 @@ public class AttendanceService {
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    public int getCountByCourseAndYearAndMonthAndStudent(AttendanceSearchDTO attendanceSearchDTO){
+        try{
+            Course c1 = modelMapper.map(attendanceSearchDTO.getCourse() , Course.class);
+            Month m1 = modelMapper.map(attendanceSearchDTO.getMonth(), Month.class);
+            int y1 = attendanceSearchDTO.getYear();
+            int d1 = attendanceSearchDTO.getDate();
+            Boolean ia = attendanceSearchDTO.getIsAttend();
+            Student s1 = modelMapper.map(attendanceSearchDTO.getStudent(), Student.class);
+            int count = attendanceRepo.countByCourseAndYearAndMonthAndStudentAndIsAttend(c1,y1,m1,s1,ia);
+            return count;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return -1;
         }
     }
 

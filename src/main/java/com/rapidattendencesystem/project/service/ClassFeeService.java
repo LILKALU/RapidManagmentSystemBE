@@ -3,8 +3,12 @@ package com.rapidattendencesystem.project.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.rapidattendencesystem.project.dto.GradeDTO;
+import com.rapidattendencesystem.project.dto.StudentCourseDTO;
+import com.rapidattendencesystem.project.entity.Course;
+import com.rapidattendencesystem.project.entity.Student;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,28 @@ public class ClassFeeService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+
+	public Optional<ClassFee> findFirstByStudentAndCourse(StudentCourseDTO studentCourseDTO){
+		try{
+			Course c1 = modelMapper.map(studentCourseDTO.getCourse() , Course.class);
+			Student s1 = modelMapper.map(studentCourseDTO.getStudent() , Student.class);
+			return classFeeRepo.findTop1ByStudentAndClassFeeCourse_CourseOrderByClassFeeCourse_MonthAsc(s1,c1);
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+
+	public Optional<ClassFee> findLastByStudentAndCourse(StudentCourseDTO studentCourseDTO){
+		try{
+			Course c1 = modelMapper.map(studentCourseDTO.getCourse() , Course.class);
+			Student s1 = modelMapper.map(studentCourseDTO.getStudent() , Student.class);
+			return classFeeRepo.findTop1ByStudentAndClassFeeCourse_CourseOrderByClassFeeCourse_MonthDesc(s1,c1);
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
 	
 	public ClassFee addClassFee(ClassFeeDTO classfeeDTO) {
 		try{

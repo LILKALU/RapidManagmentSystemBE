@@ -1,8 +1,10 @@
 package com.rapidattendencesystem.project.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.rapidattendencesystem.project.dto.GradeDTO;
+import com.rapidattendencesystem.project.dto.StudentCourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,56 @@ public class ClassFeeController {
 	
 	@Autowired
 	private ResponseDTO responseDTO;
+
+	@PostMapping("/findlastbystudentandcourse")
+	public ResponseEntity<ResponseDTO> findLastByStudentAndCourse(@RequestBody StudentCourseDTO studentCourseDTO){
+		try {
+
+			Optional<ClassFee> classFees = classFeeService.findLastByStudentAndCourse(studentCourseDTO);
+			System.out.println("returned from service");
+			if(!classFees.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setContent(classFees);
+				responseDTO.setMassage("Records Inserted");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setContent(null);
+				responseDTO.setMassage("Bad Request");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("01");
+			responseDTO.setContent(null);
+			responseDTO.setMassage(e.getMessage());
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/findfirstbystudentandcourse")
+	public ResponseEntity<ResponseDTO> findFirstByStudentAndCourse(@RequestBody StudentCourseDTO studentCourseDTO){
+		try {
+
+			Optional<ClassFee> classFees = classFeeService.findFirstByStudentAndCourse(studentCourseDTO);
+			System.out.println("returned from service");
+			if(!classFees.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setContent(classFees);
+				responseDTO.setMassage("Records Inserted");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setContent(null);
+				responseDTO.setMassage("Bad Request");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("01");
+			responseDTO.setContent(null);
+			responseDTO.setMassage(e.getMessage());
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@PostMapping("/addclassfee")
 	public ResponseEntity<ResponseDTO> addClassFee(@RequestBody ClassFeeDTO classFeeDTOs){

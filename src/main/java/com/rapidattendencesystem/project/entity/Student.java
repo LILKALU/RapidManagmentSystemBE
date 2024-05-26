@@ -39,6 +39,7 @@ public class Student {
 	private String contactNumber;
 	private String School;
 	private Boolean isAdmisionPaid;
+	private String email;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Address address;

@@ -35,6 +35,7 @@ public class Parent {
 	private String relationship;
 	private String occupation;
 	private String contactNumber;
+	private String email;
 
 	
 //	@OneToMany(mappedBy = "parent", cascade = CascadeType.PERSIST)

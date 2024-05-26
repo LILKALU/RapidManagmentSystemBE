@@ -20,4 +20,5 @@ public class ParentDTO {
 	private String occupation;
 	private String contactNumber;
 	private Boolean isActive;
+	private String email;
 }

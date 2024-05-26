@@ -42,4 +42,14 @@ public class EnrolmentCourseService {
             return null;
         }
     }
+
+    public List<EnrolmentCourse> deleteEnrolmentCourses(List<EnrolmentCourseDTO> enrolmentCourseDTO){
+        try{
+            List<EnrolmentCourse> EC1 = modelMapper.map(enrolmentCourseDTO, new TypeToken<List<EnrolmentCourse>>() {}.getType());
+            return enrolmentCourseRepo.saveAll(EC1);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }

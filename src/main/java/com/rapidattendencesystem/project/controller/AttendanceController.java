@@ -70,6 +70,29 @@ public class AttendanceController {
         }
     }
 
+    @PostMapping("/getcountbycourseandyearandmonthandstudent")
+    public ResponseEntity<ResponseDTO> getCountByCourseAndYearAndMonthAndStudent(@RequestBody AttendanceSearchDTO AttendanceSearchDTO){
+        try{
+            int count = attendanceService.getCountByCourseAndYearAndMonthAndStudent(AttendanceSearchDTO);
+            if(count != -1){
+                responseDTO.setCode("00");
+                responseDTO.setMassage("Success");
+                responseDTO.setContent(count);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setMassage("No Attendance");
+                responseDTO.setContent(-1);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("01");
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setContent(-1);
+            return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/getattendancebycourseanddate")
     public ResponseEntity<ResponseDTO> getAttendanceByCourseAndDate(@RequestBody AttendanceSearchDTO AttendanceSearchDTO){
         try{

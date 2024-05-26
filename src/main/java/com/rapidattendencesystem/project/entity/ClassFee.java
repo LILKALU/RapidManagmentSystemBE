@@ -1,16 +1,10 @@
 package com.rapidattendencesystem.project.entity;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,4 +29,11 @@ public class ClassFee {
 	
 	@OneToMany(mappedBy = "classFee", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ClassFeeCourse> classFeeCourse;
+
+	private String reciptNumber;
+
+	@PostPersist
+	public void generateScode() {
+		this.reciptNumber = "R" + String.format("%05d", this.id);
+	}
 }

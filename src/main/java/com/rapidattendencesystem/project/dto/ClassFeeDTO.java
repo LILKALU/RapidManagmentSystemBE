@@ -20,4 +20,5 @@ public class ClassFeeDTO {
 	private LocalDateTime date;
 	private Student student;
 	private List<ClassFeeCourseDTO> classFeeCourse;
+	private String reciptNumber;
 }

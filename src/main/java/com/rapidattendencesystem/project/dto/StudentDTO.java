@@ -27,4 +27,5 @@ public class StudentDTO {
 	private Parent parent;
 	private String School;
 	private Boolean isAdmisionPaid;
+	private String email;
 }

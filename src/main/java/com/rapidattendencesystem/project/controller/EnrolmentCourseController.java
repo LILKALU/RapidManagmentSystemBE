@@ -71,4 +71,27 @@ public class EnrolmentCourseController {
             return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/deleteenrolmentcourses")
+    public ResponseEntity<ResponseDTO> deleteEnrolmentCourseS(@RequestBody List<EnrolmentCourseDTO> enrolmentCourseDTO){
+        try{
+            List<EnrolmentCourse> EC1 = enrolmentCourseService.deleteEnrolmentCourses(enrolmentCourseDTO);
+            if(!EC1.isEmpty()){
+                responseDTO.setContent(EC1);
+                responseDTO.setMassage("Deleted");
+                responseDTO.setCode("00");
+                return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+            }else{
+                responseDTO.setContent(enrolmentCourseDTO);
+                responseDTO.setMassage("Error Occured");
+                responseDTO.setCode("01");
+                return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            responseDTO.setContent(null);
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setCode("02");
+            return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

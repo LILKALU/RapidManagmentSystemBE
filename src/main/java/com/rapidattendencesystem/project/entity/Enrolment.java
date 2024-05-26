@@ -27,7 +27,7 @@ public class Enrolment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	private Student student;
 	
 	@OneToMany(mappedBy = "enrolment",cascade = CascadeType.ALL, orphanRemoval = true)
