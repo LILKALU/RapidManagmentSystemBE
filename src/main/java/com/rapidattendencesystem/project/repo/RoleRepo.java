@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RoleRepo extends JpaRepository<Role,Integer> {
     List<Role> findByIsActive(Boolean isActive);
+    Role findRoleById(int id);
 }

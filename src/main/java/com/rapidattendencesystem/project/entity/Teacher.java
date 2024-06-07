@@ -22,7 +22,7 @@ public class Teacher {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	private String tCode;
+	private String tcode;
 	private String fullName;
 	private String title;
 	private String highestQulification;
@@ -36,9 +36,13 @@ public class Teacher {
 	@JsonIgnore
 	private List<Course> course;
 
+	@ManyToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "role_id")
+	private Role role;
+
 	@PostPersist
 	public void generateCode() {
-		this.tCode = "T" + String.format("%05d", this.id);
+		this.tcode = "T" + String.format("%05d", this.id);
 	}
 
 }

@@ -4,4 +4,6 @@ import com.rapidattendencesystem.project.entity.ADAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ADAccountRepo extends JpaRepository<ADAccount, Integer> {
+    ADAccount findByUserCodeAndPassWord(String usercode, String password);
+
 }

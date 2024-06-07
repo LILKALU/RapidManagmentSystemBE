@@ -55,6 +55,10 @@ public class Student {
 	@OneToMany(mappedBy = "student")
 	@JsonIgnore
 	private List<ClassFee> classFee;
+
+	@ManyToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "role_id")
+	private Role role;
 	
 	@PostPersist
     public void generateScode() {

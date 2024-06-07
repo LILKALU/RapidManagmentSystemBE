@@ -129,6 +129,29 @@ public class StudentContoller {
 			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@GetMapping("/getstudentsbyteacherid/{teacherId}")
+	public ResponseEntity<ResponseDTO> getStudentsByTeacherId(@PathVariable int teacherId){
+		try {
+			List<StudentDTO> students= studentService.getStudentsByTeacherId(teacherId);
+			if(!students.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Success");
+				responseDTO.setContent(students);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Sudents are empty");
+				responseDTO.setContent(null);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@GetMapping("/getstudentbyscode/{scode}")
 	public ResponseEntity<ResponseDTO> getStudentByScode(@PathVariable String scode){

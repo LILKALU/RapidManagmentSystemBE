@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TeacherRepo extends JpaRepository<Teacher , Integer> {
     List<Teacher> findByIsActive(Boolean active);
+    Teacher findTeacherByTcode(String tcode);
 }

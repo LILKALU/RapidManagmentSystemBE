@@ -3,11 +3,14 @@ package com.rapidattendencesystem.project.dto;
 import com.rapidattendencesystem.project.entity.Address;
 import com.rapidattendencesystem.project.entity.Parent;
 
+import com.rapidattendencesystem.project.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,4 +31,5 @@ public class StudentDTO {
 	private String School;
 	private Boolean isAdmisionPaid;
 	private String email;
+	private Role role;
 }

@@ -2,6 +2,7 @@ package com.rapidattendencesystem.project.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rapidattendencesystem.project.entity.Course;
+import com.rapidattendencesystem.project.entity.Role;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.util.List;
 public class TeacherDTO {
 
     private int id;
-    private String tCode;
+    private String tcode;
     private String fullName;
     private String title;
     private String highestQulification;
@@ -26,4 +27,5 @@ public class TeacherDTO {
     private String contactNumber;
     private String email;
     private List<Course> course;
+    private Role role;
 }
