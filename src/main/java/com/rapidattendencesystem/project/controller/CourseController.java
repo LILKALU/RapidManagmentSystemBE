@@ -93,6 +93,30 @@ public class CourseController {
 			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@GetMapping("/getcoursesbyteacherid/{teacherId}")
+	public ResponseEntity<ResponseDTO> getCoursesByTeacherId(@PathVariable int teacherId){
+		try {
+			List<CourseDTO> courses = courseService.getCoursesByTeacherId(teacherId);
+			if(!courses.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Success");
+				responseDTO.setContent(courses);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Courses Are Empty");
+				responseDTO.setContent(null);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@GetMapping("/getcourses")
 	public ResponseEntity<ResponseDTO> getCourses(){

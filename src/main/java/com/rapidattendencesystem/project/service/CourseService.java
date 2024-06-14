@@ -29,6 +29,10 @@ public class CourseService {
 		return modalMapper.map(courseRepo.findByIsActive(true), new TypeToken<List<CourseDTO>>() {}.getType()) ;
 	}
 
+	public List<CourseDTO> getCoursesByTeacherId(int teacherId) {
+		return modalMapper.map(courseRepo.findAllByTeacherId(teacherId), new TypeToken<List<CourseDTO>>() {}.getType()) ;
+	}
+
 	public Course deleteCourse(CourseDTO courseDTO){
 		try{
 			Course C1 = modalMapper.map(courseDTO , Course.class);
