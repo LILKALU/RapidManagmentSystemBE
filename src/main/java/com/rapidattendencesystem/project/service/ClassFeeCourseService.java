@@ -1,8 +1,8 @@
 package com.rapidattendencesystem.project.service;
 
 import com.rapidattendencesystem.project.dto.CourseWiseClassFeeDTO;
+import com.rapidattendencesystem.project.dto.MonthWiseIncome;
 import com.rapidattendencesystem.project.dto.StudentCourseDTO;
-import com.rapidattendencesystem.project.entity.ClassFee;
 import com.rapidattendencesystem.project.entity.ClassFeeCourse;
 import com.rapidattendencesystem.project.entity.Course;
 import com.rapidattendencesystem.project.entity.Student;
@@ -12,9 +12,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,6 +25,38 @@ public class ClassFeeCourseService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    public List<MonthWiseIncome> getStudentClassFeeByCourse(){
+        try{
+            List<Object[]> counts = classFeeCourseRepo.getStudentClassFeeByCourse();
+            List<MonthWiseIncome> monthWiseIncomes = new ArrayList<>();
+            BigDecimal zero = new BigDecimal("0.00");
+
+            for (Object[] count : counts){
+                MonthWiseIncome dto = new MonthWiseIncome();
+                if (count[0] != null) {
+                    dto.setMonthId((int) count[0]);
+                } else {
+                    // Set a default value or handle the null case
+                    dto.setMonthId(0);  // Default value for null monthId
+                }
+                if (count[1] != null) {
+                    dto.setAmmount((BigDecimal) count[1]);
+                } else {
+                    // Set a default value or handle the null case
+                    dto.setAmmount((BigDecimal) zero);  // Default value for null monthId
+                }
+
+                monthWiseIncomes.add(dto);
+            }
+
+            return monthWiseIncomes;
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 
     public List<CourseWiseClassFeeDTO> findLastByStudentAndCourse(List<StudentCourseDTO> studentCourseDTO){
         try{

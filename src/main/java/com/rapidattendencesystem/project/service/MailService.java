@@ -1,6 +1,7 @@
 package com.rapidattendencesystem.project.service;
 
 import com.rapidattendencesystem.project.dto.EmailDataDTO;
+import com.rapidattendencesystem.project.dto.TeacherEmailDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,34 @@ public class MailService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    public String SendTeacherReciptEmailWithAttachment(TeacherEmailDTO emailData){
+        try{
+            if (emailData.getTeacherEmail() == null || emailData.getTeacherEmail().isEmpty()) {
+                throw new IllegalArgumentException("Student email is null or empty");
+            }
+
+            String[] recipients = { emailData.getTeacherEmail()};
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(recipients);
+            helper.setSubject("Your Receipt from Rapid Institute");
+            helper.setText("Please find your receipt attached.");
+
+            byte[] pdfBytes = Base64.getDecoder().decode(emailData.getPdfBase64());
+            ByteArrayResource pdfResource = new ByteArrayResource(pdfBytes);
+
+            helper.addAttachment("receipt.pdf", pdfResource);
+
+            mailSender.send(message);
+
+            return "Message Sent";
+        }catch(Exception e){
+            System.err.println("MessagingException: " + e.getMessage());
+            return "Messageing Exeption Occurd";
+        }
+    }
 
     public String SendEmailWithAttachment(EmailDataDTO emailData){
         try{

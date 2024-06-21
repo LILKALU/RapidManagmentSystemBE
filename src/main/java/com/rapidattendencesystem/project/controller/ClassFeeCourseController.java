@@ -2,18 +2,15 @@ package com.rapidattendencesystem.project.controller;
 
 import com.rapidattendencesystem.project.dto.CourseWiseClassFeeDTO;
 import com.rapidattendencesystem.project.dto.ResponseDTO;
+import com.rapidattendencesystem.project.dto.MonthWiseIncome;
 import com.rapidattendencesystem.project.dto.StudentCourseDTO;
-import com.rapidattendencesystem.project.entity.ClassFee;
-import com.rapidattendencesystem.project.entity.ClassFeeCourse;
 import com.rapidattendencesystem.project.service.ClassFeeCourseService;
-import com.rapidattendencesystem.project.service.ClassFeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/classfeecoursectrl")
@@ -25,6 +22,31 @@ public class ClassFeeCourseController {
 
     @Autowired
     private ResponseDTO responseDTO;
+
+    @GetMapping("/getstudentclassfeegroupbycourse")
+    public ResponseEntity<ResponseDTO> getStudentClassFeeByCourse(){
+        try {
+
+            List<MonthWiseIncome> studentCountByCourseDTO = classFeeCourseService.getStudentClassFeeByCourse();
+            System.out.println("returned from service");
+            if(!studentCountByCourseDTO.isEmpty()) {
+                responseDTO.setCode("00");
+                responseDTO.setContent(studentCountByCourseDTO);
+                responseDTO.setMassage("Success");
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+            }else {
+                responseDTO.setCode("01");
+                responseDTO.setContent(null);
+                responseDTO.setMassage("Bad Request");
+                return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            responseDTO.setCode("01");
+            responseDTO.setContent(null);
+            responseDTO.setMassage(e.getMessage());
+            return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/findlastbystudentandcourse")
     public ResponseEntity<ResponseDTO> findLastByStudentAndCourse(@RequestBody List<StudentCourseDTO> studentCourseDTO){

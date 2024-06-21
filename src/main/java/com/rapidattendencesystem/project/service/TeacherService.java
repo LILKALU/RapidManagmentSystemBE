@@ -1,7 +1,9 @@
 package com.rapidattendencesystem.project.service;
 
+import com.rapidattendencesystem.project.dto.CourseWisePaymentDTO;
 import com.rapidattendencesystem.project.dto.SubjectDTO;
 import com.rapidattendencesystem.project.dto.TeacherDTO;
+import com.rapidattendencesystem.project.entity.Course;
 import com.rapidattendencesystem.project.entity.Subject;
 import com.rapidattendencesystem.project.entity.Teacher;
 import com.rapidattendencesystem.project.repo.TeacherRepo;
@@ -11,6 +13,8 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -60,6 +64,31 @@ public class TeacherService {
     public List<TeacherDTO> getTeachers(){
         try {
             return modelMapper.map(teacherRepo.findByIsActive(true) , new TypeToken<List<TeacherDTO>>() {}.getType());
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public List<CourseWisePaymentDTO> getTeacherEarningsForMonthByCourseWise(int teacherId, int monthId){
+        try{
+            List<Object[]> results = teacherRepo.getTeacherEarningsForMonthByCourseWise(teacherId,monthId);
+            List<CourseWisePaymentDTO> courseWisePaymentDTO = new ArrayList<>();
+            for (Object[] result : results){
+                int courseId = (int) result[0];
+                int studentCount = (int) result[1];
+                Long amount = (Long) result[2];
+                Boolean isPayed = (Boolean) result[3];
+
+                CourseWisePaymentDTO dto = new CourseWisePaymentDTO();
+                dto.setCourseId(courseId);
+                dto.setAmount(amount);
+                dto.setStudentCount(studentCount);
+                dto.setIsPayed(isPayed);
+
+                courseWisePaymentDTO.add(dto);
+            }
+            return courseWisePaymentDTO;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;

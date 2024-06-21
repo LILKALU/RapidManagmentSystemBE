@@ -19,6 +19,7 @@ public class FrontDesk {
     private String title;
     private String contactNumber;
     private String email;
+    private Boolean isActive;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id")

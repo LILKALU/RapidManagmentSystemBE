@@ -1,9 +1,6 @@
 package com.rapidattendencesystem.project.controller;
 
-import com.rapidattendencesystem.project.dto.CourseDTO;
-import com.rapidattendencesystem.project.dto.EnrolmentCourseDTO;
-import com.rapidattendencesystem.project.dto.EnrolmentDTO;
-import com.rapidattendencesystem.project.dto.ResponseDTO;
+import com.rapidattendencesystem.project.dto.*;
 import com.rapidattendencesystem.project.entity.Course;
 import com.rapidattendencesystem.project.entity.EnrolmentCourse;
 import com.rapidattendencesystem.project.service.EnrolmentCourseService;
@@ -91,6 +88,29 @@ public class EnrolmentCourseController {
             responseDTO.setContent(null);
             responseDTO.setMassage(e.getMessage());
             responseDTO.setCode("02");
+            return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getstudentcountbycourse")
+    public ResponseEntity<ResponseDTO> getStudentCountByCourse(){
+        try {
+            List<CourseWiseStudentCountDTO> res = enrolmentCourseService.getStudentCountByCourse();
+            if(!res.isEmpty()) {
+                responseDTO.setCode("00");
+                responseDTO.setContent(res);
+                responseDTO.setMassage("Success");
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+            }else {
+                responseDTO.setCode("01");
+                responseDTO.setContent(null);
+                responseDTO.setMassage("Bad Request");
+                return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            responseDTO.setCode("02");
+            responseDTO.setContent(null);
+            responseDTO.setMassage(e.getMessage());
             return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

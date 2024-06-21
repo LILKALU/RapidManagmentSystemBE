@@ -1,5 +1,6 @@
 package com.rapidattendencesystem.project.controller;
 
+import com.rapidattendencesystem.project.dto.CourseWisePaymentDTO;
 import com.rapidattendencesystem.project.dto.ResponseDTO;
 import com.rapidattendencesystem.project.dto.SubjectDTO;
 import com.rapidattendencesystem.project.dto.TeacherDTO;
@@ -118,6 +119,33 @@ public class TeacherController {
                 responseDTO.setContent(null);
 
                 return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("02");
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setContent(null);
+
+            return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
+    @GetMapping("/getteacherearningsformonthbycoursewise/{teacherId}/{monthId}")
+    public ResponseEntity<ResponseDTO> getTeacherEarningsForMonthByCourseWise(@PathVariable int teacherId, @PathVariable int monthId){
+        try{
+            List<CourseWisePaymentDTO> courseWisePaymentDTO = teacherService.getTeacherEarningsForMonthByCourseWise(teacherId,monthId);
+            if(!courseWisePaymentDTO.isEmpty()){
+                responseDTO.setCode("00");
+                responseDTO.setMassage("Success");
+                responseDTO.setContent(courseWisePaymentDTO);
+
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setMassage("Not Found Any Records");
+                responseDTO.setContent(null);
+
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
             }
         }catch (Exception e){
             responseDTO.setCode("02");

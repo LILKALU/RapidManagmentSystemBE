@@ -20,4 +20,5 @@ public class OtherEmployeeDTO {
     private String title;
     private String contactNumber;
     private String email;
+    private Boolean isActive;
 }
