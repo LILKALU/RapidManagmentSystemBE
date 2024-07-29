@@ -1,10 +1,12 @@
 package com.rapidattendencesystem.project.service;
 
 import com.rapidattendencesystem.project.dto.CourseWiseClassFeeDTO;
+import com.rapidattendencesystem.project.dto.MonthCourseDTO;
 import com.rapidattendencesystem.project.dto.MonthWiseIncome;
 import com.rapidattendencesystem.project.dto.StudentCourseDTO;
 import com.rapidattendencesystem.project.entity.ClassFeeCourse;
 import com.rapidattendencesystem.project.entity.Course;
+import com.rapidattendencesystem.project.entity.Month;
 import com.rapidattendencesystem.project.entity.Student;
 import com.rapidattendencesystem.project.repo.ClassFeeCourseRepo;
 import jakarta.transaction.Transactional;
@@ -26,9 +28,19 @@ public class ClassFeeCourseService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<MonthWiseIncome> getStudentClassFeeByCourse(){
+    public List<Student> getClassFeeCourseByMonthAndCourse(MonthCourseDTO monthCourseDTO){
         try{
-            List<Object[]> counts = classFeeCourseRepo.getStudentClassFeeByCourse();
+            Month m1 = modelMapper.map(monthCourseDTO.getMonth(),Month.class);
+            Course c1 = modelMapper.map(monthCourseDTO.getCourse(),Course.class);
+            return classFeeCourseRepo.findClassFeeCourse_ClassFee_StudentByCourseAndMonth(c1,m1);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+    public List<MonthWiseIncome> getStudentClassFeeByCourse(int year){
+        try{
+            List<Object[]> counts = classFeeCourseRepo.getStudentClassFeeByCourse(year);
             List<MonthWiseIncome> monthWiseIncomes = new ArrayList<>();
             BigDecimal zero = new BigDecimal("0.00");
 

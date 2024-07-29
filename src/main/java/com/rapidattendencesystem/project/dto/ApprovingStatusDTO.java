@@ -9,8 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MonthDTO {
+public class ApprovingStatusDTO {
     private int id;
     private String name;
-    private String color;
 }

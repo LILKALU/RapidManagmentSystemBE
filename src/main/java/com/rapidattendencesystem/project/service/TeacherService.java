@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -64,6 +65,17 @@ public class TeacherService {
     public List<TeacherDTO> getTeachers(){
         try {
             return modelMapper.map(teacherRepo.findByIsActive(true) , new TypeToken<List<TeacherDTO>>() {}.getType());
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public Optional<Teacher> getTeacherByUserCode(String tCode){
+        try{
+            Optional<Teacher> t1 = teacherRepo.findTeacherByTcode(tCode);
+
+            return t1;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;

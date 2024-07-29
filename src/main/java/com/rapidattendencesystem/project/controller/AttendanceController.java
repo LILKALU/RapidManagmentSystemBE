@@ -1,9 +1,6 @@
 package com.rapidattendencesystem.project.controller;
 
-import com.rapidattendencesystem.project.dto.AttendanceDTO;
-import com.rapidattendencesystem.project.dto.AttendanceSearchDTO;
-import com.rapidattendencesystem.project.dto.CourseDTO;
-import com.rapidattendencesystem.project.dto.ResponseDTO;
+import com.rapidattendencesystem.project.dto.*;
 import com.rapidattendencesystem.project.entity.Attendance;
 import com.rapidattendencesystem.project.service.AttendanceService;
 import com.rapidattendencesystem.project.service.HallService;
@@ -139,6 +136,28 @@ public class AttendanceController {
         }
     }
 
+    @GetMapping("/getattendancecountbymonthandcourse/{year}")
+    public ResponseEntity<ResponseDTO> getAttendanceCountByMonthAndCourse(@PathVariable int year){
+        try{
+            List<AttendanceCountByMonthAndCourseDTO> attendancesCount = attendanceService.getAttendanceCountByMonthAndCourse(year);
+            if(!attendancesCount.isEmpty()){
+                responseDTO.setCode("00");
+                responseDTO.setMassage("Success");
+                responseDTO.setContent(attendancesCount);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setMassage("Bad Request");
+                responseDTO.setContent(null);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("01");
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setContent(null);
+            return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/markattendance")
     public ResponseEntity<ResponseDTO> markAttendance(@RequestBody List<AttendanceDTO> attendanceDTOS){

@@ -9,8 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MonthDTO {
-    private int id;
-    private String name;
-    private String color;
+public class MonthCourseDTO {
+    private CourseDTO course;
+    private MonthDTO month;
 }

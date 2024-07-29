@@ -1,9 +1,8 @@
 package com.rapidattendencesystem.project.controller;
 
-import com.rapidattendencesystem.project.dto.CourseWiseClassFeeDTO;
-import com.rapidattendencesystem.project.dto.ResponseDTO;
-import com.rapidattendencesystem.project.dto.MonthWiseIncome;
-import com.rapidattendencesystem.project.dto.StudentCourseDTO;
+import com.rapidattendencesystem.project.dto.*;
+import com.rapidattendencesystem.project.entity.ClassFeeCourse;
+import com.rapidattendencesystem.project.entity.Student;
 import com.rapidattendencesystem.project.service.ClassFeeCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,11 +22,11 @@ public class ClassFeeCourseController {
     @Autowired
     private ResponseDTO responseDTO;
 
-    @GetMapping("/getstudentclassfeegroupbycourse")
-    public ResponseEntity<ResponseDTO> getStudentClassFeeByCourse(){
+    @GetMapping("/getstudentclassfeegroupbycourse/{year}")
+    public ResponseEntity<ResponseDTO> getStudentClassFeeByCourse(@PathVariable int year){
         try {
 
-            List<MonthWiseIncome> studentCountByCourseDTO = classFeeCourseService.getStudentClassFeeByCourse();
+            List<MonthWiseIncome> studentCountByCourseDTO = classFeeCourseService.getStudentClassFeeByCourse(year);
             System.out.println("returned from service");
             if(!studentCountByCourseDTO.isEmpty()) {
                 responseDTO.setCode("00");
@@ -38,7 +37,7 @@ public class ClassFeeCourseController {
                 responseDTO.setCode("01");
                 responseDTO.setContent(null);
                 responseDTO.setMassage("Bad Request");
-                return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
             }
         } catch (Exception e) {
             responseDTO.setCode("01");
@@ -83,6 +82,30 @@ public class ClassFeeCourseController {
                 responseDTO.setCode("00");
                 responseDTO.setContent(classFees);
                 responseDTO.setMassage("Records Inserted");
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+            }else {
+                responseDTO.setCode("01");
+                responseDTO.setContent(null);
+                responseDTO.setMassage("Bad Request");
+                return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            responseDTO.setCode("01");
+            responseDTO.setContent(null);
+            responseDTO.setMassage(e.getMessage());
+            return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/getclassfeecoursebymonthandcourse")
+    public ResponseEntity<ResponseDTO> getClassFeeCourseByMonthAndCourse(@RequestBody MonthCourseDTO monthCourseDTO){
+        try {
+            List<Student> classFees = classFeeCourseService.getClassFeeCourseByMonthAndCourse(monthCourseDTO);
+            System.out.println("returned from service");
+            if(!classFees.isEmpty()) {
+                responseDTO.setCode("00");
+                responseDTO.setContent(classFees);
+                responseDTO.setMassage("Records Have");
                 return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
             }else {
                 responseDTO.setCode("01");

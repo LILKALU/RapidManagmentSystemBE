@@ -48,6 +48,27 @@ public class ADAccountService {
     @Autowired
     private ModelMapper modelMapper;
 
+    public ADAccount updateADAccount(ADAccountDTO adAccountDTO){
+        try {
+            MessageDigest md  = MessageDigest.getInstance("MD5");
+            md.reset();
+            md.update(adAccountDTO.getPassWord().getBytes());
+            byte[] encodedPswd = md.digest();
+            BigInteger bigInt = new BigInteger(1,encodedPswd);
+            String hashtext = bigInt.toString(16);
+            adAccountDTO.setPassWord(hashtext);
+            ADAccount A1 = modelMapper.map(adAccountDTO , ADAccount.class);
+
+            ADAccount A2 = adAccountRepo.save(A1);
+            System.out.println("User Account Updated");
+            return A2;
+        }catch (Exception e){
+            ADAccount A1 = modelMapper.map(adAccountDTO , ADAccount.class);
+            System.out.println(e.getMessage());
+            return A1;
+        }
+    }
+
     public ADAccount createUserAccount(ADAccountDTO adAccountDTO){
         try {
             MessageDigest md  = MessageDigest.getInstance("MD5");
@@ -71,6 +92,26 @@ public class ADAccountService {
             ADAccount A1 = modelMapper.map(adAccountDTO , ADAccount.class);
             System.out.println(e.getMessage());
             return A1;
+        }
+    }
+
+    public ADAccount getALogin(ADAccountDTO adAccountDTO){
+        try{
+            MessageDigest md  = MessageDigest.getInstance("MD5");
+            md.reset();
+            md.update(adAccountDTO.getPassWord().getBytes());
+            byte[] encodedPswd = md.digest();
+            BigInteger bigInt = new BigInteger(1,encodedPswd);
+            String hashtext = bigInt.toString(16);
+
+            String usercode = adAccountDTO.getUserCode();
+
+            ADAccount adAccount = adAccountRepo.findByUserCodeAndPassWord(usercode,hashtext);
+
+            return adAccount;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 
@@ -111,7 +152,7 @@ public class ADAccountService {
             loginDetailsDTO.setPrivilagesDTO(P2);
 
         }else if(fl =='T'){
-            Teacher T1 = teacherRepo.findTeacherByTcode(usercode);
+            Teacher T1 = teacherRepo.findTeacherByTcode(usercode).get();
             List<Privilages> P1 = privilagesRepo.findByRoleAndIsActive(T1.getRole(),true);
             List<PrivilagesDTO> P2 = modelMapper.map(P1, new TypeToken<List<PrivilagesDTO>>() {}.getType());
             loginDetailsDTO.setFullName(T1.getFullName());

@@ -23,6 +23,7 @@ public class ClassFee {
 	private int id;
 	
 	private LocalDateTime date;
+	private int year;
 	
 	@ManyToOne
 	private Student student;

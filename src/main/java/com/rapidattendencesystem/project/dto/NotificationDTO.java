@@ -9,8 +9,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MonthDTO {
+public class NotificationDTO {
     private int id;
-    private String name;
-    private String color;
+
+    private String message;
+    private String createdUserCode;
+    private String createdDateTime;
+    private Boolean isActive;
 }

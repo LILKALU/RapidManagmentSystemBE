@@ -15,7 +15,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+//@ToString
 @Table(name = "Teacher")
 public class Teacher {
 	@Id

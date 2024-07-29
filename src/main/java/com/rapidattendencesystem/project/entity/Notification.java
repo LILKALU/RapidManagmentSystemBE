@@ -11,12 +11,15 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "month")
-public class Month {
+@Table(name = "notification")
+public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
-    private String color;
 
+    private String message;
+    private String createdUserCode;
+    private String createdDateTime;
+    private Boolean isActive;
 }

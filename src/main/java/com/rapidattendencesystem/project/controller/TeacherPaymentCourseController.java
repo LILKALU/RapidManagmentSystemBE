@@ -7,10 +7,7 @@ import com.rapidattendencesystem.project.service.TeacherPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,11 +22,11 @@ public class TeacherPaymentCourseController {
     @Autowired
     private ResponseDTO responseDTO;
 
-    @GetMapping("/getteacherpaymentbymonth")
-    public ResponseEntity<ResponseDTO> getTeacherPaymentByMonth(){
+    @GetMapping("/getteacherpaymentbymonth/{year}")
+    public ResponseEntity<ResponseDTO> getTeacherPaymentByMonth(@PathVariable int year){
         try {
 
-            List<MonthWiseIncome> teacherPaymentByMonth = teacherPaymentCourseService.getTeacherPaymentBymonth();
+            List<MonthWiseIncome> teacherPaymentByMonth = teacherPaymentCourseService.getTeacherPaymentBymonth(year);
             System.out.println("returned from service");
             if(!teacherPaymentByMonth.isEmpty()) {
                 responseDTO.setCode("00");
@@ -40,7 +37,7 @@ public class TeacherPaymentCourseController {
                 responseDTO.setCode("01");
                 responseDTO.setContent(null);
                 responseDTO.setMassage("Bad Request");
-                return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
             }
         } catch (Exception e) {
             responseDTO.setCode("01");

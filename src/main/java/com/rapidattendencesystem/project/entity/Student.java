@@ -40,6 +40,10 @@ public class Student {
 	private String School;
 	private Boolean isAdmisionPaid;
 	private String email;
+
+	@OneToMany(mappedBy = "student")
+	@JsonIgnore
+	private List<Enrolment> enrolment;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Address address;
@@ -47,10 +51,6 @@ public class Student {
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "parent_id" , insertable = true)
 	private Parent parent;
-
-	@OneToMany(mappedBy = "student")
-	@JsonIgnore
-	private List<Enrolment> enrolment;
 	
 	@OneToMany(mappedBy = "student")
 	@JsonIgnore

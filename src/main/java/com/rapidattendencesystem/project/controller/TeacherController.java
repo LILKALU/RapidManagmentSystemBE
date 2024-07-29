@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/teacherctrl")
@@ -111,6 +112,33 @@ public class TeacherController {
                 responseDTO.setCode("00");
                 responseDTO.setMassage("Success");
                 responseDTO.setContent(teachers);
+
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setMassage("Not Found Any Records");
+                responseDTO.setContent(null);
+
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("02");
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setContent(null);
+
+            return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
+    @GetMapping("/getteacher/{tcode}")
+    public ResponseEntity<ResponseDTO> getTeacherByUserCode(@PathVariable String tcode){
+        try{
+            Optional<Teacher> teacher = teacherService.getTeacherByUserCode(tcode);
+            if(!(teacher.isEmpty())){
+                responseDTO.setCode("00");
+                responseDTO.setMassage("Success");
+                responseDTO.setContent(teacher);
 
                 return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
             }else{

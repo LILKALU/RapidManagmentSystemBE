@@ -46,6 +46,58 @@ public class ADAccountController {
         }
     }
 
+    @PutMapping("/updateadacoount")
+    public ResponseEntity<ResponseDTO> updateADAccount(@RequestBody ADAccountDTO adAccountDTO){
+        try {
+            System.out.println(adAccountDTO);
+            ADAccount A1 = adAccountService.updateADAccount(adAccountDTO);
+            System.out.println(A1);
+            if(A1.getId()>0){
+                responseDTO.setCode("00");
+                responseDTO.setMassage("Account Updated");
+                responseDTO.setContent(A1);
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setMassage("Error Occered");
+                responseDTO.setContent(adAccountDTO);
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("02");
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setContent(null);
+            return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+    @PostMapping("/getalogin")
+    public ResponseEntity<ResponseDTO> getALogin(@RequestBody ADAccountDTO adAccountDTO){
+        try {
+            System.out.println(adAccountDTO);
+            ADAccount A1 = adAccountService.getALogin(adAccountDTO);
+            System.out.println(A1);
+            if(A1.getId() > 0){
+                responseDTO.setCode("00");
+                responseDTO.setMassage("Account Varified");
+                responseDTO.setContent(A1);
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setMassage("Error Occered");
+                responseDTO.setContent(null);
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("02");
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setContent(null);
+            return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/checklogin")
     public ResponseEntity<ResponseDTO> checklogin(@RequestBody ADAccountDTO adAccountDTO){
         try {
@@ -54,7 +106,7 @@ public class ADAccountController {
             System.out.println(A1);
             if(!A1.getFullName().isEmpty()){
                 responseDTO.setCode("00");
-                responseDTO.setMassage("Account Created");
+                responseDTO.setMassage("Account Varified");
                 responseDTO.setContent(A1);
                 return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
             }else{

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,6 +28,35 @@ public class AttendanceService {
         try{
             List<AttendanceDTO> attendances = modelMapper.map(attendanceRepo.findAll(), new TypeToken<List<AttendanceDTO>>() {}.getType()) ;
             return attendances;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public List<AttendanceCountByMonthAndCourseDTO> getAttendanceCountByMonthAndCourse(int year){
+        try{
+            List<AttendanceCountByMonthAndCourseDTO> attendanceCountByMonthAndCourseDTO = new ArrayList<AttendanceCountByMonthAndCourseDTO>();
+            List<Object[]> repoData = attendanceRepo.getAttendanceCountByCourseAndMonth(year);
+
+            for(Object[] rd : repoData){
+                AttendanceCountByMonthAndCourseDTO acmc = new AttendanceCountByMonthAndCourseDTO();
+
+                int courseId = (int) rd[0];
+                String courseName = (String) rd[1];
+                int monthId = (int) rd[2];
+                String monthName = (String) rd[3];
+                int srudentcount = (int) rd[4];
+
+                acmc.setCourseId(courseId);
+                acmc.setCourseName(courseName);
+                acmc.setMonthId(monthId);
+                acmc.setMonthName(monthName);
+                acmc.setStudentCount(srudentcount);
+
+                attendanceCountByMonthAndCourseDTO.add(acmc);
+            }
+            return attendanceCountByMonthAndCourseDTO;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;

@@ -19,6 +19,7 @@ public class ClassFeeDTO {
 	private int id;
 	private LocalDateTime date;
 	private Student student;
+	private int year;
 	private List<ClassFeeCourseDTO> classFeeCourse;
 	private String reciptNumber;
 }

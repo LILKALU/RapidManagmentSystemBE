@@ -21,9 +21,9 @@ public class TeacherPaymentCourseService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<MonthWiseIncome> getTeacherPaymentBymonth(){
+    public List<MonthWiseIncome> getTeacherPaymentBymonth(int year){
         try{
-            List<Object[]> counts = teacherPaymentCourseRepo.getTeacherPaymentByMonth();
+            List<Object[]> counts = teacherPaymentCourseRepo.getTeacherPaymentByMonth(year);
             List<MonthWiseIncome> monthWiseIncomes = new ArrayList<>();
             BigDecimal zero = new BigDecimal("0.00");
 

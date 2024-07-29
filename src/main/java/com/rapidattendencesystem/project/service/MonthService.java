@@ -24,7 +24,7 @@ public class MonthService {
 
     public List<MonthDTO> getMonths(){
         try{
-            return modelMapper.map(monthRepo.findAll(), new TypeToken<List<GradeDTO>>() {}.getType()) ;
+            return modelMapper.map(monthRepo.findAll(), new TypeToken<List<MonthDTO>>() {}.getType()) ;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;
