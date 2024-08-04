@@ -5,6 +5,7 @@ import java.util.List;
 import com.rapidattendencesystem.project.dto.HallDTO;
 import com.rapidattendencesystem.project.entity.Course;
 import com.rapidattendencesystem.project.entity.Hall;
+import com.sun.jdi.event.StepEvent;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,26 @@ public class CourseService {
 	
 	public List<CourseDTO> getCourses() {
 		return modalMapper.map(courseRepo.findByIsActive(true), new TypeToken<List<CourseDTO>>() {}.getType()) ;
+	}
+
+	public List<CourseDTO> getCoursesByDate(String date) {
+		return modalMapper.map(courseRepo.findByDateAndIsActive(date,true), new TypeToken<List<CourseDTO>>() {}.getType()) ;
+	}
+
+	public List<CourseDTO> getCoursesByDateAndTeacher(String date, int teacherId) {
+		return modalMapper.map(courseRepo.findByDateAndIsActiveAndTeacherCode(true, date,teacherId ), new TypeToken<List<CourseDTO>>() {}.getType()) ;
+	}
+
+	public List<CourseDTO> getCoursesByTeacher(int teacherId) {
+		return modalMapper.map(courseRepo.findByIsActiveAndTeacher_Id(true,teacherId ), new TypeToken<List<CourseDTO>>() {}.getType()) ;
+	}
+
+	public List<CourseDTO> getCanceledCoursesByDate(String day, String date) {
+		return modalMapper.map(courseRepo.findCanceledCoursesByDate(true,day,date), new TypeToken<List<CourseDTO>>() {}.getType()) ;
+	}
+
+	public List<CourseDTO> getCoursesByStudentIdAndDate(int studentId, String date) {
+		return modalMapper.map(courseRepo.findCoursesByStudentIdAndDate(studentId,date,true), new TypeToken<List<CourseDTO>>() {}.getType()) ;
 	}
 
 	public List<CourseDTO> getCoursesByTeacherId(int teacherId) {

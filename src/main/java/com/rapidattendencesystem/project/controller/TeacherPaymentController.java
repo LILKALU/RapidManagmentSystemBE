@@ -47,6 +47,29 @@ public class TeacherPaymentController {
         }
     }
 
+    @GetMapping("/getteacherpaymentbyteacherid/{teacherId}")
+    public ResponseEntity<ResponseDTO> getTeacherPaymentByTeacherId(@PathVariable int teacherId){
+        try{
+            List<TeacherPaymentDTO> teacherPayments = teacherPaymentService.getTeacherPaymentByTeacherId(teacherId);
+            if(!teacherPayments.isEmpty()){
+                responseDTO.setCode("00");
+                responseDTO.setMassage("Succuss");
+                responseDTO.setContent(teacherPayments);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setMassage("Payments Empty");
+                responseDTO.setContent(null);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("02");
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setContent(null);
+            return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/addteacherpayment")
     public ResponseEntity<ResponseDTO> addTeacherPayment(@RequestBody TeacherPaymentDTO teacherPaymentDTO){
         try {

@@ -54,7 +54,7 @@ public class LeaveRequestController {
             List<LeaveRequestDTO> L1 = leaveRequestService.getLeaveRequest(usercode);
             if(!L1.isEmpty()){
                 responseDTO.setCode("00");
-                responseDTO.setMassage("Request Inserted");
+                responseDTO.setMassage("Requests Found");
                 responseDTO.setContent(L1);
                 return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
             }else{

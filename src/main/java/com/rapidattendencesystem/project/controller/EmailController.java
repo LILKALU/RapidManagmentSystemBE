@@ -66,4 +66,27 @@ public class EmailController {
             return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/sendleavemessage/{message}/{teacherId}")
+    public ResponseEntity<ResponseDTO> sendLeaveMessage(@PathVariable String message, @PathVariable int teacherId){
+        try{
+            String res = mailService.SendEmail(message, teacherId);
+            if(res.equals("Message Sent")){
+                responseDTO.setCode("00");
+                responseDTO.setContent(res);
+                responseDTO.setMassage(res);
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setContent(res);
+                responseDTO.setMassage(res);
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("02");
+            responseDTO.setContent(e.getMessage());
+            responseDTO.setMassage(e.getMessage());
+            return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -104,7 +104,7 @@ public class ADAccountController {
             System.out.println(adAccountDTO);
             LoginDetailsDTO A1 = adAccountService.checkLogin(adAccountDTO);
             System.out.println(A1);
-            if(!A1.getFullName().isEmpty()){
+            if(!(A1==null)){
                 responseDTO.setCode("00");
                 responseDTO.setMassage("Account Varified");
                 responseDTO.setContent(A1);
@@ -113,7 +113,7 @@ public class ADAccountController {
                 responseDTO.setCode("01");
                 responseDTO.setMassage("Error Occered");
                 responseDTO.setContent(adAccountDTO);
-                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
             }
         }catch (Exception e){
             responseDTO.setCode("02");

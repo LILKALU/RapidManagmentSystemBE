@@ -63,7 +63,7 @@ public class LeaveRequestService {
         try{
             char fl = usercode.charAt(0);
             if(fl == 'T'){
-                List<LeaveRequest> l1 = leaveRequestRepo.findByIsActiveAndTeacher_Tcode(true,usercode);
+                List<LeaveRequest> l1 = leaveRequestRepo.findByIsActiveAndTeacher_TcodeOrderByIdDesc(true,usercode);
                 List<LeaveRequestDTO> l2 = modelMapper.map(l1 , new TypeToken<List<LeaveRequestDTO>>() {}.getType());
 
                 return l2;

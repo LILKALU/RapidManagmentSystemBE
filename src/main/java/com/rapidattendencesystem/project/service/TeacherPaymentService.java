@@ -37,6 +37,15 @@ public class TeacherPaymentService {
         }
     }
 
+    public List<TeacherPaymentDTO> getTeacherPaymentByTeacherId(int teacherId){
+        try{
+            return modelMapper.map(teacherPaymentRepo.findByTeacher_IdOrderByIdDesc(teacherId), new TypeToken<List<TeacherPaymentDTO>>() {}.getType()) ;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
     public TeacherPaymentDTO addTeacherPayment(TeacherPaymentDTO teacherPaymentDTO) {
         try{
             if(teacherPaymentRepo.existsById(teacherPaymentDTO.getId())) {

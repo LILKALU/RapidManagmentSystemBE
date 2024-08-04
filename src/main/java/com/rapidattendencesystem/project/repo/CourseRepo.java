@@ -13,7 +13,18 @@ import java.util.List;
 @Repository
 public interface CourseRepo extends JpaRepository<Course, Integer> {
     List<Course> findByIsActive(Boolean active);
+    List<Course> findByDateAndIsActive(String date, Boolean active);
+    List<Course> findByIsActiveAndTeacher_Id(Boolean isActive, int teacherId);
+
+    @Query("SELECT c FROM Course c WHERE c.isActive = :isActive AND c.date = :date AND c.teacher.id = :teacherId")
+    List<Course> findByDateAndIsActiveAndTeacherCode(@Param("isActive") Boolean isActive, @Param("date") String date, @Param("teacherId") int teacherId);
 
     @Query("SELECT c FROM Course c WHERE c.teacher.id = :teacherId AND c.isActive = true")
     List<Course> findAllByTeacherId(@Param("teacherId") int teacherId);
+
+    @Query("SELECT c FROM Course c WHERE c.isActive = :isActive AND c.date = :date AND c.teacher.id IN (SELECT lr.teacher.id FROM LeaveRequest lr WHERE lr.approvingStatus.id = 1 AND lr.requestedDate LIKE CONCAT(:day, '%'))")
+    List<Course> findCanceledCoursesByDate(@Param("isActive") Boolean isActive, @Param("day") String day, @Param("date") String date);
+
+    @Query("SELECT c FROM Course c WHERE c.isActive = :isActive AND c.date = :date AND c.id in (SELECT ec.course.id FROM Enrolment e JOIN e.enrolmentCourses ec WHERE e.student.id = :studentId )")
+    List<Course> findCoursesByStudentIdAndDate(@Param("studentId") int studentId, @Param("date") String date, @Param("isActive") Boolean isActive);
 }

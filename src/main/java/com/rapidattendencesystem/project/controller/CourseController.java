@@ -108,7 +108,7 @@ public class CourseController {
 				responseDTO.setCode("01");
 				responseDTO.setMassage("Courses Are Empty");
 				responseDTO.setContent(null);
-				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			responseDTO.setCode("02");
@@ -117,6 +117,127 @@ public class CourseController {
 			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@GetMapping("/getcanceledcoursesbydate/{day}/{date}")
+	public ResponseEntity<ResponseDTO> getCanceledCoursesByDate(@PathVariable String day, @PathVariable String date){
+		try {
+			List<CourseDTO> courses = courseService.getCanceledCoursesByDate(day,date);
+			if(!courses.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Success");
+				responseDTO.setContent(courses);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Courses Are Empty");
+				responseDTO.setContent(null);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/getcoursesbydateandteacher/{date}/{teacherId}")
+	public ResponseEntity<ResponseDTO> getCoursesByDateAndTeacher(@PathVariable String date,@PathVariable int teacherId){
+		try {
+			List<CourseDTO> courses = courseService.getCoursesByDateAndTeacher(date,teacherId);
+			if(!courses.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Success");
+				responseDTO.setContent(courses);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Courses Are Empty");
+				responseDTO.setContent(null);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/getcoursesbydateandstudentid/{date}/{studentId}")
+	public ResponseEntity<ResponseDTO> getCoursesByStudentIdAndDate(@PathVariable String date,@PathVariable int studentId){
+		try {
+			List<CourseDTO> courses = courseService.getCoursesByStudentIdAndDate(studentId,date);
+			if(!courses.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Success");
+				responseDTO.setContent(courses);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Courses Are Empty");
+				responseDTO.setContent(null);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/getcoursesbyteacher/{teacherId}")
+	public ResponseEntity<ResponseDTO> getCoursesByTeacher(@PathVariable int teacherId){
+		try {
+			List<CourseDTO> courses = courseService.getCoursesByTeacher(teacherId);
+			if(!courses.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Success");
+				responseDTO.setContent(courses);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Courses Are Empty");
+				responseDTO.setContent(null);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/getcoursesbydate/{date}")
+	public ResponseEntity<ResponseDTO> getCoursesByDate(@PathVariable String date){
+		try {
+			List<CourseDTO> courses = courseService.getCoursesByDate(date);
+			if(!courses.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setMassage("Success");
+				responseDTO.setContent(courses);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setMassage("Courses Are Empty");
+				responseDTO.setContent(null);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("02");
+			responseDTO.setMassage(e.getMessage());
+			responseDTO.setContent(null);
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	
 	@GetMapping("/getcourses")
 	public ResponseEntity<ResponseDTO> getCourses(){

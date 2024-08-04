@@ -6,5 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface NotificationRepo extends JpaRepository<Notification , Integer> {
-    List<Notification> findByIsActive(Boolean isActive);
+    List<Notification> findByIsActiveOrderByIdDesc(Boolean isActive);
+
+    Notification findByMessageAndIsActive(String message, Boolean isActive);
 }
