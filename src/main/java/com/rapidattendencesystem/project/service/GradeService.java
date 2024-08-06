@@ -25,7 +25,7 @@ public class GradeService {
 
     public List<GradeDTO> getGrades(){
         try{
-            return modelMapper.map(gradeRepo.findByIsActive(true), new TypeToken<List<GradeDTO>>() {}.getType()) ;
+            return modelMapper.map(gradeRepo.findByIsActiveOrderByIdDesc(true), new TypeToken<List<GradeDTO>>() {}.getType()) ;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;

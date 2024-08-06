@@ -157,11 +157,11 @@ public class StudentContoller {
 	public ResponseEntity<ResponseDTO> getStudentByScode(@PathVariable String scode){
 		try {
 			StudentDTO S1 = studentService.getStudentByScode(scode);
-			if(S1.getFullName() == null) {
+			if(S1 == null) {
 				responseDTO.setCode("01");
 				responseDTO.setMassage("Sudent is empty");
 				responseDTO.setContent(null);
-				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
 			}else {
 				responseDTO.setCode("00");
 				responseDTO.setMassage("Success");

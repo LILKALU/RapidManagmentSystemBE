@@ -33,16 +33,16 @@ public class EnrolmentController {
 		System.out.println("enterd into ctrl");
 		try {
 			Enrolment enrol = enrolmentService.addEnrolment(enrolment);
-			if(enrol.getId()>0) {
+			if(enrol != null) {
 				responseDTO.setCode("00");
 				responseDTO.setContent(enrol);
 				responseDTO.setMassage("Record Inserted");
 				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
 			}else {
 				responseDTO.setCode("01");
-				responseDTO.setContent(enrol);
+				responseDTO.setContent(null);
 				responseDTO.setMassage("Error Occered");
-				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
 			}
 		} catch (Exception e) {
 				responseDTO.setCode("01");

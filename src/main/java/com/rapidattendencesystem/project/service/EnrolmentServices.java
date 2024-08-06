@@ -3,6 +3,7 @@ package com.rapidattendencesystem.project.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -31,19 +32,42 @@ public class EnrolmentServices {
 	}
 	
 	public Enrolment addEnrolment(EnrolmentDTO enrolment) {
-		if(enrolmentRepo.existsById(enrolment.getId())) {
-			return null;
-		}else {
-			Enrolment enrlmnt = modelMapper.map(enrolment, Enrolment.class);
-			List<EnrolmentCourse> enrolmentCourses = new ArrayList<>();
-			for(EnrolmentCourseDTO enrolmentCourseDTO : enrolment.getEnrolmentCorseDTO()) {
-				EnrolmentCourse enrlmntCorse = modelMapper.map(enrolmentCourseDTO, EnrolmentCourse.class);
-				enrlmntCorse.setEnrolment(enrlmnt);
-				enrolmentCourses.add(enrlmntCorse);
+
+		try{
+			Boolean isAnyCourseAlreadyExsist = false;
+			Enrolment e1 = modelMapper.map(enrolment, Enrolment.class);
+
+			List<EnrolmentCourse> enrolmentCoursesList = new ArrayList<>();
+			enrolmentCoursesList = e1.getEnrolmentCourses();
+
+			for(EnrolmentCourse enrolmentCourse : enrolmentCoursesList){
+				List<Enrolment> e2 = enrolmentRepo.findEnrolmentByStudentIdAndCourseId(e1.getStudent().getId(),enrolmentCourse.getCourse().getId(),true);
+
+				if(!(e2.isEmpty())){
+					isAnyCourseAlreadyExsist = true;
+					break;
+				}
 			}
-			enrlmnt.setEnrolmentCourses(enrolmentCourses);
-			enrlmnt.setDate(LocalDateTime.now());
-			return enrolmentRepo.save(enrlmnt);
+
+			if(isAnyCourseAlreadyExsist) {
+				return null;
+			}else {
+				Enrolment enrlmnt = modelMapper.map(enrolment, Enrolment.class);
+				List<EnrolmentCourse> enrolmentCourses = new ArrayList<>();
+				for(EnrolmentCourseDTO enrolmentCourseDTO : enrolment.getEnrolmentCourses()) {
+					EnrolmentCourse enrlmntCorse = modelMapper.map(enrolmentCourseDTO, EnrolmentCourse.class);
+					enrlmntCorse.setEnrolment(enrlmnt);
+					enrolmentCourses.add(enrlmntCorse);
+				}
+				enrlmnt.setEnrolmentCourses(enrolmentCourses);
+				enrlmnt.setDate(LocalDateTime.now());
+				return enrolmentRepo.save(enrlmnt);
+			}
+
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			return null;
 		}
     }
 	

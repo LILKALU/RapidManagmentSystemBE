@@ -142,7 +142,7 @@ public class ADAccountService {
         char fl = usercode.charAt(0);
         LoginDetailsDTO loginDetailsDTO = new LoginDetailsDTO();
         if(fl == 'S'){
-            Student S1 = studentRepo.findStudentByScode(usercode);
+            Student S1 = studentRepo.findStudentByScodeAndIsActive(usercode,true);
             List<Privilages> P1 = privilagesRepo.findByRoleAndIsActive(S1.getRole(),true);
             List<PrivilagesDTO> P2 = modelMapper.map(P1, new TypeToken<List<PrivilagesDTO>>() {}.getType());
             loginDetailsDTO.setFullName(S1.getFullName());

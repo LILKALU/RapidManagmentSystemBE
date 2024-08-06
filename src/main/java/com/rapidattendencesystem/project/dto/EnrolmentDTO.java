@@ -18,7 +18,7 @@ public class EnrolmentDTO {
 	
 	private int id;
 	private Student student;
-	private List<EnrolmentCourseDTO> enrolmentCorseDTO;
+	private List<EnrolmentCourseDTO> enrolmentCourses;
 	private LocalDateTime date;
 	
 }

@@ -108,7 +108,9 @@ public class StudentsService {
 
 	public StudentDTO getStudentByScode(String scode){
 		try{
-			Student std = studentrepo.findStudentByScode(scode);
+			String s = scode.substring(6);
+			int sid = Integer.parseInt(s);
+			Student std = studentrepo.findStudentByScodeAndIsActive(scode,true);
 			if(std.getId()>0) {
 				StudentDTO S1 = modelmapper.map(std, StudentDTO.class);
 				return S1;
