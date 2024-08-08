@@ -37,14 +37,14 @@ public class OtherEmployeeService {
     public List<OtherEmployeeDTO> getOtherEmployees(){
         try{
             List<OtherEmployeeDTO> allOtherEmployees = new ArrayList<>();
-            List<OtherEmployeeDTO> otherEmployees = modelMapper.map(frontDeskRepo.findByIsActive(true), new TypeToken<List<OtherEmployeeDTO>>() {}.getType()) ;
+            List<OtherEmployeeDTO> otherEmployees = modelMapper.map(frontDeskRepo.findByIsActiveOrderByIdDesc(true), new TypeToken<List<OtherEmployeeDTO>>() {}.getType()) ;
             allOtherEmployees = getAllOtherEmployees(allOtherEmployees,otherEmployees);
 
 
-            otherEmployees = modelMapper.map(managerRepo.findByIsActive(true), new TypeToken<List<OtherEmployeeDTO>>() {}.getType()) ;
+            otherEmployees = modelMapper.map(managerRepo.findByIsActiveOrderByIdDesc(true), new TypeToken<List<OtherEmployeeDTO>>() {}.getType()) ;
             allOtherEmployees = getAllOtherEmployees(allOtherEmployees,otherEmployees);
 
-            otherEmployees = modelMapper.map(systemAdminRepo.findByIsActive(true), new TypeToken<List<OtherEmployeeDTO>>() {}.getType()) ;
+            otherEmployees = modelMapper.map(systemAdminRepo.findByIsActiveOrderByIdDesc(true), new TypeToken<List<OtherEmployeeDTO>>() {}.getType()) ;
             allOtherEmployees = getAllOtherEmployees(allOtherEmployees,otherEmployees);
 
             return allOtherEmployees;

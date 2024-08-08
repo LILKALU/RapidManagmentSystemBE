@@ -21,4 +21,6 @@ public interface ClassFeeCourseRepo extends JpaRepository<ClassFeeCourse, Intege
 
     @Query("SELECT cfc.month.id, SUM(cfc.amount) FROM ClassFeeCourse cfc WHERE cfc.classFee.student.isActive = true AND FUNCTION('YEAR', cfc.classFee.date) = :year GROUP BY cfc.month.id")
     List<Object[]> getStudentClassFeeByCourse(@Param("year") int year);
+
+
 }

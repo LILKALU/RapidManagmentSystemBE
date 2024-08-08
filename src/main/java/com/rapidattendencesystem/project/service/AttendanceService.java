@@ -24,6 +24,39 @@ public class AttendanceService {
     @Autowired
     private ModelMapper modelMapper;
 
+    public CourseWiseMonthsWithStudentDTO removeUnAttendMonths(CourseWiseMonthsWithStudentDTO courseWiseMonthsWithStudentDTO){
+        try{
+            StudentDTO studentDTO = courseWiseMonthsWithStudentDTO.getStudent();
+            List<CourseWiseMonthsDTO> payingCourseWiseMonths = courseWiseMonthsWithStudentDTO.getPayingCourseWiseMonths();
+            int thisMonth = courseWiseMonthsWithStudentDTO.getThisMonthId();
+
+            Student student = modelMapper.map(studentDTO,Student.class);
+
+            for(CourseWiseMonthsDTO payingCourseWiseMonth : payingCourseWiseMonths){
+                Course course = payingCourseWiseMonth.getCourse();
+                List<Month> months = new ArrayList<>();
+
+                for(Month month : payingCourseWiseMonth.getMonths()){
+                    int count = attendanceRepo.countByCourseAndStudentAndMonthAndIsAttend(course,student,month,true);
+
+
+                    if(count >= 1 || month.getId() == thisMonth){
+                        months.add(month);
+                    }
+                }
+
+                payingCourseWiseMonth.setMonths(months);
+            }
+
+            courseWiseMonthsWithStudentDTO.setPayingCourseWiseMonths(payingCourseWiseMonths);
+            return courseWiseMonthsWithStudentDTO;
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
     public List<AttendanceDTO> getAllAttendance(){
         try{
             List<AttendanceDTO> attendances = modelMapper.map(attendanceRepo.findAll(), new TypeToken<List<AttendanceDTO>>() {}.getType()) ;

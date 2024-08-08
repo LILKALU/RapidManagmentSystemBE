@@ -17,4 +17,6 @@ public interface AttendanceRepo extends JpaRepository<Attendance, Integer> {
 
     @Query(value = "CALL GetAttendanceCountByMonthAndCourse(:year)", nativeQuery = true )
     List<Object[]> getAttendanceCountByCourseAndMonth(@Param("year") int year);
+
+    int countByCourseAndStudentAndMonthAndIsAttend(Course course, Student student, Month month, Boolean isAttend);
 }

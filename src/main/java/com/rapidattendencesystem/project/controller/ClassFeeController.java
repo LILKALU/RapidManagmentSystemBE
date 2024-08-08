@@ -3,15 +3,12 @@ package com.rapidattendencesystem.project.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.rapidattendencesystem.project.dto.GradeDTO;
-import com.rapidattendencesystem.project.dto.StudentCourseDTO;
+import com.rapidattendencesystem.project.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.rapidattendencesystem.project.dto.ClassFeeDTO;
-import com.rapidattendencesystem.project.dto.ResponseDTO;
 import com.rapidattendencesystem.project.entity.ClassFee;
 import com.rapidattendencesystem.project.service.ClassFeeService;
 
@@ -25,6 +22,56 @@ public class ClassFeeController {
 	
 	@Autowired
 	private ResponseDTO responseDTO;
+
+	@PostMapping("/getfirstpaiedmonth")
+	public ResponseEntity<ResponseDTO> getFirstPaidClassFee(@RequestBody StudentWiseCourseDTO studentWiseCourseDTO){
+		try {
+
+			List<CourseWiseMonthDTO> courseWiseMonthDTOS = classFeeService.getFirstPaidClassFee(studentWiseCourseDTO);
+			System.out.println("returned from service");
+			if(!courseWiseMonthDTOS.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setContent(courseWiseMonthDTOS);
+				responseDTO.setMassage("Success");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setContent(null);
+				responseDTO.setMassage("Bad Request");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("01");
+			responseDTO.setContent(null);
+			responseDTO.setMassage(e.getMessage());
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/getunpaidmonths")
+	public ResponseEntity<ResponseDTO> getUnpaidMonths(@RequestBody StudentWiseCourseDTO studentWiseCourseDTO){
+		try {
+
+			List<CourseWiseMonthsDTO> courseWiseMonthsDTOS = classFeeService.getUnpaidMonths(studentWiseCourseDTO);
+			System.out.println("returned from service");
+			if(!courseWiseMonthsDTOS.isEmpty()) {
+				responseDTO.setCode("00");
+				responseDTO.setContent(courseWiseMonthsDTOS);
+				responseDTO.setMassage("Success");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}else {
+				responseDTO.setCode("01");
+				responseDTO.setContent(null);
+				responseDTO.setMassage("Bad Request");
+				return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			responseDTO.setCode("01");
+			responseDTO.setContent(null);
+			responseDTO.setMassage(e.getMessage());
+			return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@PostMapping("/findlastbystudentandcourse")
 	public ResponseEntity<ResponseDTO> findLastByStudentAndCourse(@RequestBody StudentCourseDTO studentCourseDTO){

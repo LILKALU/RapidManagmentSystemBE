@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface FrontDeskRepo extends JpaRepository<FrontDesk, Integer> {
     FrontDesk findFrontDeskByFcode(String mcode);
-    List<FrontDesk> findByIsActive(Boolean isActive);
+    List<FrontDesk> findByIsActiveOrderByIdDesc(Boolean isActive);
 }

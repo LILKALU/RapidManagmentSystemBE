@@ -5,19 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.rapidattendencesystem.project.dto.GradeDTO;
-import com.rapidattendencesystem.project.dto.StudentCourseDTO;
-import com.rapidattendencesystem.project.entity.Course;
-import com.rapidattendencesystem.project.entity.Student;
+import com.rapidattendencesystem.project.dto.*;
+import com.rapidattendencesystem.project.entity.*;
+import com.rapidattendencesystem.project.repo.ClassFeeCourseRepo;
+import com.rapidattendencesystem.project.repo.MonthRepo;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rapidattendencesystem.project.dto.ClassFeeCourseDTO;
-import com.rapidattendencesystem.project.dto.ClassFeeDTO;
-import com.rapidattendencesystem.project.entity.ClassFee;
-import com.rapidattendencesystem.project.entity.ClassFeeCourse;
 import com.rapidattendencesystem.project.repo.ClassFeeRepo;
 
 import jakarta.transaction.Transactional;
@@ -28,9 +24,71 @@ public class ClassFeeService {
 	
 	@Autowired
 	private ClassFeeRepo classFeeRepo;
+
+	@Autowired
+	private MonthRepo monthRepo;
+
+	@Autowired
+	private ClassFeeCourseRepo classFeeCourseRepo;
 	
 	@Autowired
 	private ModelMapper modelMapper;
+
+	public List<CourseWiseMonthDTO> getFirstPaidClassFee(StudentWiseCourseDTO studentWiseCourseDTO){
+		try{
+			Student student = studentWiseCourseDTO.getStudent();
+			List<Course> courses = studentWiseCourseDTO.getCourses();
+			List<CourseWiseMonthDTO> courseWiseMonthDTOS = new ArrayList<>();
+
+			for(Course course : courses){
+				List<Month> PaiedMonth = classFeeRepo.findTop1MonthByStudentAndCourseOrderByMonthAsc(student, course);
+
+				CourseWiseMonthDTO courseWiseMonthDTO = new CourseWiseMonthDTO();
+
+				courseWiseMonthDTO.setCourse(course);
+				courseWiseMonthDTO.setMonth(PaiedMonth.get(0));
+				courseWiseMonthDTOS.add(courseWiseMonthDTO);
+			}
+
+			return courseWiseMonthDTOS;
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+
+	public List<CourseWiseMonthsDTO> getUnpaidMonths(StudentWiseCourseDTO studentWiseCourseDTO){
+		try{
+			List<Month> allMonths = monthRepo.findAll();
+			Student student = studentWiseCourseDTO.getStudent();
+			List<Course> courses = studentWiseCourseDTO.getCourses();
+			List<CourseWiseMonthsDTO> courseWiseMonthsDTOS = new ArrayList<>();
+
+			for(Course course : courses){
+				List<Month> paidMonths = classFeeRepo.findPayedMonthByStudentAndCourse(student,course);
+				ClassFeeCourse classFeeCourse = classFeeCourseRepo.findTop1ByCourseAndClassFee_StudentOrderByMonthAsc(course,student);
+				List<Month> unPaidMonths = new ArrayList<>();
+				Month firstPaidMonth = classFeeCourse.getMonth();
+
+				for(Month month : allMonths){
+					if(!(paidMonths.contains(month)) && firstPaidMonth.getId() < month.getId()){
+						unPaidMonths.add(month);
+					}
+				}
+				CourseWiseMonthsDTO courseWiseMonthsDTO = new CourseWiseMonthsDTO();
+
+				courseWiseMonthsDTO.setMonths(unPaidMonths);
+				courseWiseMonthsDTO.setCourse(course);
+				courseWiseMonthsDTOS.add(courseWiseMonthsDTO);
+
+			}
+
+			return courseWiseMonthsDTOS;
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
 
 	public Optional<ClassFee> findFirstByStudentAndCourse(StudentCourseDTO studentCourseDTO){
 		try{

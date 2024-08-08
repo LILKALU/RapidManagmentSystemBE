@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SystemAdminRepo extends JpaRepository<SystemAdmin, Integer> {
     SystemAdmin findSystemAdminBySyscode(String syscode);
-    List<SystemAdmin> findByIsActive(Boolean isActive);
+    List<SystemAdmin> findByIsActiveOrderByIdDesc(Boolean isActive);
 }

@@ -21,6 +21,29 @@ public class AttendanceController {
     @Autowired
     private ResponseDTO responseDTO;
 
+    @PostMapping("/removeunattendmonths")
+    public ResponseEntity<ResponseDTO> removeUnAttendMonths(@RequestBody CourseWiseMonthsWithStudentDTO courseWiseMonthsWithStudentDTO){
+        try{
+            CourseWiseMonthsWithStudentDTO courseWiseMonthsWithStudentDTO1 = attendanceService.removeUnAttendMonths(courseWiseMonthsWithStudentDTO);
+            if(courseWiseMonthsWithStudentDTO1 != null){
+                responseDTO.setCode("00");
+                responseDTO.setMassage("Success");
+                responseDTO.setContent(courseWiseMonthsWithStudentDTO1);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setMassage("Bad Request");
+                responseDTO.setContent(null);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("01");
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setContent(null);
+            return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/getallattendance")
     public ResponseEntity<ResponseDTO> getAllAtttendance(){
         try{

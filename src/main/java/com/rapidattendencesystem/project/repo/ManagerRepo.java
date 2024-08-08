@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ManagerRepo extends JpaRepository<Manager, Integer> {
     Manager findManagerByMcode(String mcode);
-    List<Manager> findByIsActive(Boolean isActive);
+    List<Manager> findByIsActiveOrderByIdDesc(Boolean isActive);
 }
