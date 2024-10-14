@@ -1,5 +1,6 @@
 package com.rapidattendencesystem.project.service;
 
+import com.rapidattendencesystem.project.dto.DeleteAvailabilityDTO;
 import com.rapidattendencesystem.project.dto.GradeDTO;
 import com.rapidattendencesystem.project.dto.HallDTO;
 import com.rapidattendencesystem.project.entity.Grade;
@@ -53,6 +54,23 @@ public class GradeService {
         try{
             Grade g1 = modelMapper.map(gradeDTO , Grade.class);
             return gradeRepo.save(g1);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public DeleteAvailabilityDTO checkGradeDeleteAvailability(int gradeId){
+        try{
+            DeleteAvailabilityDTO deleteAvailabilityDTO = new DeleteAvailabilityDTO();
+            List<Object[]> deleteAvailabilityObj = gradeRepo.checkGradeDeleteAvailability(gradeId);
+
+            for(Object[] obj : deleteAvailabilityObj){
+                Boolean availability = (Boolean) obj[0];
+                deleteAvailabilityDTO.setIsDeleteAvailable(availability);
+            }
+
+            return deleteAvailabilityDTO;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;

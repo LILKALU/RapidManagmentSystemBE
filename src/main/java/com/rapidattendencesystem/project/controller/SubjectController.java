@@ -1,5 +1,6 @@
 package com.rapidattendencesystem.project.controller;
 
+import com.rapidattendencesystem.project.dto.DeleteAvailabilityDTO;
 import com.rapidattendencesystem.project.dto.ResponseDTO;
 import com.rapidattendencesystem.project.dto.SubjectDTO;
 import com.rapidattendencesystem.project.entity.Subject;
@@ -45,6 +46,29 @@ public class SubjectController {
             responseDTO.setCode("02");
 
             return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getdeleteavailability/{subId}")
+    public ResponseEntity<ResponseDTO> checkGradeDeleteAvailability(@PathVariable int subId){
+        try{
+            DeleteAvailabilityDTO availability = subjectService.checkSubjectDeleteAvailability(subId);
+            if(availability != null){
+                responseDTO.setCode("00");
+                responseDTO.setMassage("Succuss");
+                responseDTO.setContent(availability);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.OK);
+            }else{
+                responseDTO.setCode("01");
+                responseDTO.setMassage("Grades Empty");
+                responseDTO.setContent(null);
+                return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            responseDTO.setCode("02");
+            responseDTO.setMassage(e.getMessage());
+            responseDTO.setContent(null);
+            return new ResponseEntity<ResponseDTO>(responseDTO , HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

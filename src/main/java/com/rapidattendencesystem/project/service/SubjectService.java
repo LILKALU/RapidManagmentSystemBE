@@ -1,5 +1,6 @@
 package com.rapidattendencesystem.project.service;
 
+import com.rapidattendencesystem.project.dto.DeleteAvailabilityDTO;
 import com.rapidattendencesystem.project.dto.HallDTO;
 import com.rapidattendencesystem.project.dto.SubjectDTO;
 import com.rapidattendencesystem.project.entity.Subject;
@@ -33,6 +34,23 @@ public class SubjectService {
                 System.out.println("User Not Exist");
                 return sub;
             }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public DeleteAvailabilityDTO checkSubjectDeleteAvailability(int subId){
+        try{
+            DeleteAvailabilityDTO deleteAvailabilityDTO = new DeleteAvailabilityDTO();
+            List<Object[]> deleteAvailabilityObj = subjectRepo.checkSubjectDeleteAvailability(subId);
+
+            for(Object[] obj : deleteAvailabilityObj){
+                Boolean availability = (Boolean) obj[0];
+                deleteAvailabilityDTO.setIsDeleteAvailable(availability);
+            }
+
+            return deleteAvailabilityDTO;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;
